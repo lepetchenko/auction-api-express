@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/OlegLep/auction-api-express#readme",
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.9.4",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "commitizen": "^4.2.4",
@@ -25,7 +27,9 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.2",
     "husky": "^4.3.8",
-    "lint-staged": "^11.1.2"
+    "lint-staged": "^11.1.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   },
   "config": {
     "commitizen": {
