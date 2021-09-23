@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "start": "node --loader ts-node/esm index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -40,5 +41,7 @@
   "lint-staged": {
     "*.{ts, tsx}": "eslint"
   },
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
