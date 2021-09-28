@@ -1,6 +1,7 @@
 import express from 'express';
 
 import mongooseLoader from './loaders/mongoose';
+import config from './config';
 
 (async () => {
   const app = express();
@@ -11,8 +12,9 @@ import mongooseLoader from './loaders/mongoose';
     res.send('Well done!');
   });
 
-  app.listen(3000, () => {
+  const { port } = config;
+  app.listen(port, () => {
     // eslint-disable-next-line no-console
-    console.log('The application is listening on port 3000!');
+    console.log(`The application is listening on port ${port}!`);
   });
 })();
