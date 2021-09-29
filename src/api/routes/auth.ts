@@ -1,9 +1,8 @@
 import {
   Router, Request, Response, NextFunction,
 } from 'express';
-import argon2 from 'argon2';
 
-import UserModel from '@/models/user';
+import AuthService from '@/services/auth';
 
 const route = Router();
 
@@ -12,15 +11,10 @@ export default () => {
     '/signup',
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { userName, password, email } = req.body;
-        const hashedPassword = await argon2.hash(password);
-        await UserModel.create({
-          userName,
-          password: hashedPassword,
-          email,
-        });
+        const AuthServiceInstance = new AuthService();
+        const { user } = await AuthServiceInstance.signUp(req.body);
 
-        return res.status(201).json({ user: 'User' });
+        return res.status(201).json({ user });
       } catch (e) {
         return next(e);
       }
