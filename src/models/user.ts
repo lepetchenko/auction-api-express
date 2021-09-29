@@ -4,7 +4,7 @@ import { IUser } from '../interfaces/IUser';
 
 const User = new mongoose.Schema(
   {
-    name: {
+    userName: {
       type: String,
       required: [true, 'Please enter a name'],
       index: true,
