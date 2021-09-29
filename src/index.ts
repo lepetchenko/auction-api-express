@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import mongooseLoader from './loaders/mongoose';
-import config from './config';
-import routes from './api/routes';
+import mongooseLoader from '@/loaders/mongoose';
+import config from '@/config';
+import routes from '@/api/routes';
 
 (async () => {
   const app = express();

@@ -3,7 +3,7 @@ import {
 } from 'express';
 import argon2 from 'argon2';
 
-import UserModel from '../../models/user';
+import UserModel from '@/models/user';
 
 const route = Router();
 
