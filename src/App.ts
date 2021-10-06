@@ -4,8 +4,9 @@ import bodyParser from 'body-parser';
 import routes from '@/api/routes';
 import mongooseLoader from '@/loaders/mongoose';
 import config from '@/config';
+import { IApp } from '@/interfaces/IApp';
 
-class App {
+class App implements IApp {
   public app: express.Application;
 
   public port: number;

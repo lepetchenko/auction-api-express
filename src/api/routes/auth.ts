@@ -2,11 +2,15 @@ import {
   Router, Request, Response,
 } from 'express';
 
-import AuthService from '@/services/auth';
+import container from '@/ioc';
+import TYPES from '@/types';
+import { IAuthService } from '@/interfaces/IAuthService';
 import { IRoutes } from '@/interfaces/IRoutes';
 
 class AuthRoutes implements IRoutes {
   public router = Router();
+
+  private authService = container.get<IAuthService>(TYPES.AuthService);
 
   constructor() {
     this.intializeRoutes();
@@ -18,8 +22,7 @@ class AuthRoutes implements IRoutes {
 
   private signup = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const AuthServiceInstance = new AuthService();
-      const { user } = await AuthServiceInstance.signUp(req.body);
+      const { user } = await this.authService.signUp(req.body);
 
       return res.status(201).json({ user });
     } catch (error) {
