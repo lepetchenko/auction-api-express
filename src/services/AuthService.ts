@@ -6,7 +6,7 @@ import { IUser, IUserInputDTO } from '@/interfaces/IUser';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IMailService } from '@/interfaces/IMailService';
 import { IEventBus } from '@/interfaces/IEventBus';
-import TYPES from '@/types';
+import TYPES from '@/constants/types';
 import EVENTS from '@/constants/events';
 
 @injectable()
@@ -19,9 +19,9 @@ export default class AuthService implements IAuthService {
 
   public constructor(
   // eslint-disable-next-line @typescript-eslint/indent
-    @inject(TYPES.MailService) mailService: IMailService,
-    @inject(TYPES.UserModel) userModel: Model<any>,
-    @inject(TYPES.EventBus) eventBus: IEventBus,
+    @inject(TYPES.services.MailService) mailService: IMailService,
+    @inject(TYPES.models.UserModel) userModel: Model<any>,
+    @inject(TYPES.decorators.EventBus) eventBus: IEventBus,
   ) {
     this.mailService = mailService;
     this.userModel = userModel;

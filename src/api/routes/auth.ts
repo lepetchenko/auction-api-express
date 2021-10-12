@@ -3,14 +3,14 @@ import {
 } from 'express';
 
 import container from '@/ioc';
-import TYPES from '@/types';
+import TYPES from '@/constants/types';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IRoutes } from '@/interfaces/IRoutes';
 
 class AuthRoutes implements IRoutes {
   public router = Router();
 
-  private authService = container.get<IAuthService>(TYPES.AuthService);
+  private authService = container.get<IAuthService>(TYPES.services.AuthService);
 
   constructor() {
     this.intializeRoutes();
