@@ -5,7 +5,9 @@ import { Model, LeanDocument } from 'mongoose';
 import { IUser, IUserInputDTO } from '@/interfaces/IUser';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IMailService } from '@/interfaces/IMailService';
+import { IEventBus } from '@/interfaces/IEventBus';
 import TYPES from '@/types';
+import EVENTS from '@/constants/events';
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -13,13 +15,17 @@ export default class AuthService implements IAuthService {
 
   private userModel: Model<any>;
 
+  private eventBus: IEventBus;
+
   public constructor(
   // eslint-disable-next-line @typescript-eslint/indent
     @inject(TYPES.MailService) mailService: IMailService,
     @inject(TYPES.UserModel) userModel: Model<any>,
+    @inject(TYPES.EventBus) eventBus: IEventBus,
   ) {
     this.mailService = mailService;
     this.userModel = userModel;
+    this.eventBus = eventBus;
   }
 
   public signUp = async (
@@ -37,8 +43,7 @@ export default class AuthService implements IAuthService {
       const user = userRecord.toObject();
       Reflect.deleteProperty(user, 'password');
 
-      // TODO Just DI test, it's better to use PUB/SUB layer here
-      this.mailService.sendWelcomeLetter(user);
+      this.eventBus.emit(EVENTS.auth.signUp, user);
 
       return { user };
     } catch (e) {
