@@ -1,7 +1,7 @@
 import { Schema, Document, model } from 'mongoose';
-import Joi from 'joi';
 
 import { IUser } from '@/interfaces/IUser';
+import { userEmailValidator, userNameValidator, userPasswordValidator } from '@/validation-schemas/userInput';
 
 const userSchema = new Schema(
   {
@@ -11,9 +11,8 @@ const userSchema = new Schema(
       index: true,
       unique: true,
       validate: [
-        (userName: string) => !Joi.string().min(3).max(30).required()
-          .validate(userName).error,
-        'Please fill a valid user name',
+        (userName: string) => !userNameValidator.validate(userName).error,
+        'Please enter a valid user name',
       ],
     },
     email: {
@@ -23,14 +22,17 @@ const userSchema = new Schema(
       unique: true,
       index: true,
       validate: [
-        (email: string) => !Joi.string().email().required()
-          .validate(email).error,
-        'Please fill a valid email address',
+        (email: string) => !userEmailValidator.validate(email).error,
+        'Please enter a valid email address',
       ],
     },
     password: {
       type: String,
       required: [true, 'Please enter a password'],
+      validate: [
+        (email: string) => !userPasswordValidator.validate(email).error,
+        'Please enter a valid password',
+      ],
     },
   },
   { timestamps: true },
