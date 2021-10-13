@@ -1,14 +1,14 @@
-import {
-  Router, Request, Response,
-} from 'express';
+import { Router, Request, Response } from 'express';
 
 import container from '@/ioc';
 import TYPES from '@/constants/types';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IRoutes } from '@/interfaces/IRoutes';
+import validate from '@/middlewares/validate';
+import userInput from '@/validation-schemas/userInput';
 
 class AuthRoutes implements IRoutes {
-  public router = Router();
+  public router: Router = Router();
 
   private authService = container.get<IAuthService>(TYPES.services.AuthService);
 
@@ -17,7 +17,7 @@ class AuthRoutes implements IRoutes {
   }
 
   intializeRoutes = (): void => {
-    this.router.post('/signup', this.signup);
+    this.router.post('/signup', validate(userInput), this.signup);
   };
 
   private signup = async (req: Request, res: Response): Promise<Response> => {
