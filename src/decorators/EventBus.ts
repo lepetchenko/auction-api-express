@@ -7,7 +7,7 @@ import { IEventBus } from '@/interfaces/IEventBus';
  * This class was created for ability to subscribe some functions for events via decorators
  */
 @injectable()
-class EventBus extends EventEmitter implements IEventBus {
+class EventBus extends EventEmitter implements IEventBus, EventEmitter {
   public constructor() {
     super();
   }
