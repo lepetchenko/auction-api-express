@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
+import '@/ioc';
 import routes from '@/api/routes';
 import mongooseLoader from '@/loaders/mongoose';
 import config from '@/config';
