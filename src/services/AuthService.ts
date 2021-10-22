@@ -1,8 +1,6 @@
-import argon2 from 'argon2';
 import { injectable, inject } from 'inversify';
-import { Model, LeanDocument } from 'mongoose';
 
-import { IUser, IUserInputDTO } from '@/interfaces/IUser';
+import { IUser, IUserInputDTO, IUserModel } from '@/interfaces/IUser';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IMailService } from '@/interfaces/IMailService';
 import { IEventBus } from '@/interfaces/IEventBus';
@@ -11,17 +9,11 @@ import EVENTS from '@/constants/events';
 
 @injectable()
 export default class AuthService implements IAuthService {
-  private mailService: IMailService;
-
-  private userModel: Model<any>;
-
-  private eventBus: IEventBus;
-
   public constructor(
   // eslint-disable-next-line @typescript-eslint/indent
-    @inject(TYPES.services.MailService) mailService: IMailService,
-    @inject(TYPES.models.UserModel) userModel: Model<any>,
-    @inject(TYPES.decorators.EventBus) eventBus: IEventBus,
+    @inject(TYPES.services.MailService) private mailService: IMailService,
+    @inject(TYPES.models.UserModel) private userModel: IUserModel,
+    @inject(TYPES.decorators.EventBus) private eventBus: IEventBus,
   ) {
     this.mailService = mailService;
     this.userModel = userModel;
@@ -30,17 +22,14 @@ export default class AuthService implements IAuthService {
 
   public signUp = async (
     userInputDTO: IUserInputDTO,
-  ): Promise<{ user: IUser & LeanDocument<any> }> => {
+  ): Promise<{ user: IUser }> => {
     const { userName, password, email } = userInputDTO;
-    const hashedPassword = await argon2.hash(password);
-    const userRecord = await this.userModel.create({
+
+    const user = await this.userModel.checkAndCreate({
       userName,
-      password: hashedPassword,
+      password,
       email,
     });
-
-    const user = userRecord.toObject();
-    Reflect.deleteProperty(user, 'password');
 
     this.eventBus.emit(EVENTS.auth.signUp, user);
 

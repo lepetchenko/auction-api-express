@@ -1,9 +1,11 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { badData } from '@hapi/boom';
+import argon2 from 'argon2';
 
-import { IUser } from '@/interfaces/IUser';
+import { IUser, IUserModel, IUserInputDTO } from '@/interfaces/IUser';
 import { userEmailValidator, userNameValidator, userPasswordValidator } from '@/validation-schemas/userInput';
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUser, IUserModel>(
   {
     userName: {
       type: String,
@@ -38,6 +40,29 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-const User = model<IUser & Document>('User', userSchema);
+userSchema.statics = {
+  async checkAndCreate(userInput: IUserInputDTO) {
+    const throwError = (field: string) => {
+      throw badData(`User with this ${field} already exists`);
+    };
+
+    const { userName, email, password } = userInput;
+
+    const userWithSameUserName = await this.findOne({ userName });
+    if (userWithSameUserName) { throwError('user name'); }
+
+    const userWithSameEmail = await this.findOne({ email });
+    if (userWithSameEmail) { throwError('email'); }
+
+    const hashedPassword = await argon2.hash(password);
+    const userRecord = await this.create({ ...userInput, password: hashedPassword });
+    const user = userRecord.toObject();
+    Reflect.deleteProperty(user, 'password');
+
+    return user;
+  },
+};
+
+const User = model<IUser, IUserModel>('User', userSchema);
 
 export default User;
