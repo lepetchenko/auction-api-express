@@ -50,6 +50,7 @@
     "*.{ts, tsx}": "eslint"
   },
   "dependencies": {
+    "@hapi/boom": "^8.0.1",
     "argon2": "^0.28.2",
     "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",

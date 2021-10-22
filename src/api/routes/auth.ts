@@ -6,6 +6,7 @@ import { IAuthService } from '@/interfaces/IAuthService';
 import { IRoutes } from '@/interfaces/IRoutes';
 import validate from '@/middlewares/validate';
 import userInput from '@/validation-schemas/userInput';
+import { errorWrap } from '@/common/utils';
 
 class AuthRoutes implements IRoutes {
   public router: Router = Router();
@@ -17,17 +18,13 @@ class AuthRoutes implements IRoutes {
   }
 
   intializeRoutes = (): void => {
-    this.router.post('/signup', validate(userInput), this.signup);
+    this.router.post('/signup', validate(userInput), errorWrap(this.signup));
   };
 
   private signup = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const { user } = await this.authService.signUp(req.body);
+    const { user } = await this.authService.signUp(req.body);
 
-      return res.status(201).json({ user });
-    } catch (error) {
-      return res.status(400).json({ message: 'Something went wrong.' });
-    }
+    return res.status(201).json({ user });
   };
 }
 

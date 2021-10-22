@@ -1,19 +1,19 @@
-import { Schema } from 'joi';
+import { Schema, assert } from 'joi';
 import { Request, Response, NextFunction } from 'express';
+import { badData } from '@hapi/boom';
 
 export default (schema: Schema, property: 'body' | 'query' = 'body') => (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const { error } = schema.validate(req[property]);
-
-  if (!error) {
+  try {
+    assert(req[property], schema);
     next();
-  } else {
+  } catch (error: any) {
     const { details } = error;
-    const message = details.map((i) => i.message).join(',');
+    const message = details.map((i: { message:string }) => i.message).join(',');
 
-    res.status(422).json({ error: message });
+    throw badData(message);
   }
 };

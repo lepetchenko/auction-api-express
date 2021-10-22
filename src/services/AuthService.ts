@@ -31,25 +31,19 @@ export default class AuthService implements IAuthService {
   public signUp = async (
     userInputDTO: IUserInputDTO,
   ): Promise<{ user: IUser & LeanDocument<any> }> => {
-    try {
-      const { userName, password, email } = userInputDTO;
-      const hashedPassword = await argon2.hash(password);
-      const userRecord = await this.userModel.create({
-        userName,
-        password: hashedPassword,
-        email,
-      });
+    const { userName, password, email } = userInputDTO;
+    const hashedPassword = await argon2.hash(password);
+    const userRecord = await this.userModel.create({
+      userName,
+      password: hashedPassword,
+      email,
+    });
 
-      const user = userRecord.toObject();
-      Reflect.deleteProperty(user, 'password');
+    const user = userRecord.toObject();
+    Reflect.deleteProperty(user, 'password');
 
-      this.eventBus.emit(EVENTS.auth.signUp, user);
+    this.eventBus.emit(EVENTS.auth.signUp, user);
 
-      return { user };
-    } catch (e) {
-      // TODO add logger instead of console
-      console.error(e);
-      throw e;
-    }
+    return { user };
   };
 }

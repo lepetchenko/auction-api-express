@@ -6,6 +6,7 @@ import routes from '@/api/routes';
 import mongooseLoader from '@/loaders/mongoose';
 import config from '@/config';
 import { IApp } from '@/interfaces/IApp';
+import { handleError } from '@/common/utils';
 
 class App implements IApp {
   public app: express.Application;
@@ -28,6 +29,7 @@ class App implements IApp {
 
   private initializeRoutes = () => {
     this.app.use(routes());
+    this.app.use(handleError);
   };
 
   private initializeMongoose = () => {
