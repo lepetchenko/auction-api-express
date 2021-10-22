@@ -1,7 +1,6 @@
 const TYPES = {
   services: {
     AuthService: Symbol('AuthService'),
-    MailService: Symbol('MailService'),
   },
   models: {
     UserModel: Symbol('UserModel'),
