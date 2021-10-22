@@ -4,7 +4,7 @@ import container from '@/ioc';
 import TYPES from '@/constants/types';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IRoutes } from '@/interfaces/IRoutes';
-import validate from '@/middlewares/validate';
+import validate from '@/api/middlewares/validate';
 import userInput from '@/validation-schemas/userInput';
 import { errorWrap } from '@/common/utils';
 

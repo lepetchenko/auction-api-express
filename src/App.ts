@@ -6,7 +6,7 @@ import routes from '@/api/routes';
 import mongooseLoader from '@/loaders/mongoose';
 import config from '@/config';
 import { IApp } from '@/interfaces/IApp';
-import handleError from '@/middlewares/handleError';
+import handleError from '@/api/middlewares/handleError';
 
 class App implements IApp {
   public app: express.Application;
