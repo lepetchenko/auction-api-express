@@ -10,7 +10,6 @@ export default (error: any, req: Request, res: Response, next: NextFunction) => 
   }
 
   // TODO log(req.path, error.message)
-  console.error(req.path, error.message);
   /**
    * Process error as unknown error (for example, duplicate key im mongo). It means that we
    * do not know what code thrown this error. In this case it's better to log what happened

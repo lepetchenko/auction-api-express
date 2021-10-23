@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import assert from 'assert';
 
 import App from '@/App';
 
@@ -43,10 +42,10 @@ describe('/auth routes', () => {
       .expect(201)
       .then((response) => {
         const { user: resUser } = response.body;
-        assert.equal(resUser.userName, user.userName);
-        assert.equal(resUser.email, user.email);
+        expect(resUser.userName).toBe(user.userName);
+        expect(resUser.email).toBe(user.email);
         /** We should remove encrypted password from response */
-        assert.equal(resUser.password, undefined);
+        expect(resUser.password).toBe(undefined);
         done();
       })
       .catch((err) => done(err));
