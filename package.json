@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon",
     "test": "jest --verbose",
+    "test:watch": "jest --verbose --watch",
     "lint": "eslint ./src --ignore-path .gitignore --ext .ts"
   },
   "repository": {

@@ -4,9 +4,9 @@ import { boomify } from '@hapi/boom';
 import { mockResponse, mockRequest } from '@/tests/mocks/express';
 import handleError from '@/api/middlewares/handleError';
 
-export const mockError = new Error();
+const mockError = new Error();
 
-export const boomError = boomify(new Error(), { message: 'boom error', statusCode: 404 });
+const boomError = boomify(new Error(), { message: 'boom error', statusCode: 404 });
 
 describe('handleError middleware test', () => {
   it('should 500 if unknown error', () => {

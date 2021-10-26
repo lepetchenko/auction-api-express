@@ -7,4 +7,6 @@ export const mockResponse = () => {
   return res;
 };
 
-export const mockRequest = () => ({} as Request);
+export const mockRequest = (requestContent?: any) => ({
+  ...requestContent,
+} as Request);
