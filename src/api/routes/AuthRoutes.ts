@@ -17,15 +17,15 @@ class AuthRoutes implements IRoutes {
     this.intializeRoutes();
   }
 
-  intializeRoutes = (): void => {
+  intializeRoutes(): void {
     this.router.post('/signup', validate(userInput), errorWrap(this.signup));
-  };
+  }
 
-  private signup = async (req: Request, res: Response): Promise<Response> => {
+  signup = async (req: Request, res: Response): Promise<Response> => {
     const { user } = await this.authService.signUp(req.body);
 
     return res.status(201).json({ user });
   };
 }
 
-export default new AuthRoutes().router;
+export default AuthRoutes;

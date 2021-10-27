@@ -1,10 +1,14 @@
 import { Router } from 'express';
 
-import auth from './auth';
+import AuthRoutes from './AuthRoutes';
+
+const routesArray = [
+  { pathPrefix: '/auth', routesStack: new AuthRoutes() },
+];
 
 export default () => {
   const app = Router();
-  app.use('/auth', auth);
+  routesArray.forEach(({ pathPrefix, routesStack }) => app.use(pathPrefix, routesStack.router));
 
   return app;
 };
