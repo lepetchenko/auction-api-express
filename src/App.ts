@@ -7,6 +7,7 @@ import mongooseLoader from '@/loaders/mongoose';
 import config from '@/config';
 import { IApp } from '@/interfaces/IApp';
 import handleError from '@/api/middlewares/handleError';
+import logRequest from '@/api/middlewares/logRequest';
 
 class App implements IApp {
   public app: express.Application;
@@ -25,6 +26,7 @@ class App implements IApp {
   private initializeMiddlewares = () => {
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(bodyParser.json());
+    this.app.use(logRequest);
   };
 
   private initializeRoutes = () => {
