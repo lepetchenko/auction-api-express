@@ -17,4 +17,7 @@ export default {
   port: parseInt(process.env.PORT, 10),
   databaseURL: process.env.MONGODB_URI,
   nodeEnv: process.env.NODE_ENV || 'development',
+  accessTokenSalt: process.env.ACCESS_TOKEN_SALT,
+  accessTokenLifeDuration: Number(process.env.ACCESS_TOKEN_LIFE_DURATION) * 1000,
+  refreshTokenLifeDuration: Number(process.env.REFRESH_TOKEN_LIFE_DURATION) * 1000,
 };

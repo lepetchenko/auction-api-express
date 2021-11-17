@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import jwt from 'jsonwebtoken';
+import { validate as uuidValidate } from 'uuid';
 
 import App from '@/App';
+import config from '@/config';
 
 let mongoServer: MongoMemoryServer;
 
@@ -41,11 +44,15 @@ describe('/auth routes', () => {
       .send(user)
       .expect(201)
       .then((response) => {
-        const { user: resUser } = response.body;
+        const { user: resUser, tokens: { access, refresh } } = response.body;
         expect(resUser.userName).toBe(user.userName);
         expect(resUser.email).toBe(user.email);
         /** We should remove encrypted password from response */
         expect(resUser.password).toBe(undefined);
+
+        expect(jwt.verify(access, config.accessTokenSalt));
+        /** Should be valid uuid */
+        expect(uuidValidate(refresh));
         done();
       })
       .catch((err) => done(err));

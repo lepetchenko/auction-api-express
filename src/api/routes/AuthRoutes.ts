@@ -21,10 +21,10 @@ class AuthRoutes implements IRoutes {
     this.router.post('/signup', validate(userInput), errorWrap(this.signup));
   }
 
-  signup = async (req: Request, res: Response): Promise<Response> => {
-    const { user } = await this.authService.signUp(req.body);
+  signup = async (req: Request, res: Response) => {
+    const { user, tokens } = await this.authService.signUp(req.body);
 
-    return res.status(201).json({ user });
+    res.status(201).json({ user, tokens });
   };
 }
 

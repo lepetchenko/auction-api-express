@@ -1,9 +1,12 @@
 import { Router, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 
 import { mockResponse, mockRequest } from '@/tests/mocks/express';
 import container from '@/ioc';
 import TYPES from '@/constants/types';
 import AuthRoutes from './AuthRoutes';
+import config from '@/config';
 
 jest.mock('express', () => ({
   Router: jest.fn().mockReturnValue({
@@ -21,7 +24,11 @@ describe('AuthRoutes test', () => {
 
   it('should call AuthSercive.signUp() and return user', async () => {
     const user = { userName: 'John', email: 'test@test.com', password: 'pass' };
-    const authServiceMock = { signUp: jest.fn().mockReturnValue({ user }) };
+    const tokens = {
+      access: jwt.sign(user, config.accessTokenSalt),
+      refresh: uuidv4(),
+    };
+    const authServiceMock = { signUp: jest.fn().mockReturnValue({ user, tokens }) };
     const req = mockRequest({ body: user });
     const res = mockResponse();
     container.rebind(TYPES.services.AuthService).toConstantValue(authServiceMock);
@@ -29,6 +36,6 @@ describe('AuthRoutes test', () => {
     await authRoutes.signup(req, res as Response);
     expect(authServiceMock.signUp).toHaveBeenCalledWith(req.body);
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({ user });
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ user, tokens }));
   });
 });
