@@ -30,31 +30,33 @@ describe('auth routes test', () => {
     expect(authRoutes.intializeRoutes).toHaveBeenCalledTimes(1);
   });
 
-  it('should call AuthService.signUp() and return user', async () => {
-    expect.hasAssertions();
+  describe('test AuthService.signUp() method', () => {
+    it('should call AuthService.signUp() and return user', async () => {
+      expect.hasAssertions();
 
-    // Arrange
-    const user = {
-      userName: faker.internet.userName(),
-      password: faker.internet.password(),
-      email: faker.internet.email().toLowerCase(),
-    };
-    const tokens = {
-      access: jwt.sign(user, config.accessTokenSalt),
-      refresh: uuidv4(),
-    };
-    const authServiceMock = { signUp: jest.fn().mockReturnValue({ user, tokens }) };
-    const req = mockRequest({ body: user });
-    const res = mockResponse();
-    container.rebind(TYPES.services.AuthService).toConstantValue(authServiceMock);
-    const authRoutes = new AuthRoutes();
+      // Arrange
+      const user = {
+        userName: faker.internet.userName(),
+        password: faker.internet.password(),
+        email: faker.internet.email().toLowerCase(),
+      };
+      const tokens = {
+        access: jwt.sign(user, config.accessTokenSalt),
+        refresh: uuidv4(),
+      };
+      const authServiceMock = { signUp: jest.fn().mockReturnValue({ user, tokens }) };
+      const req = mockRequest({ body: user });
+      const res = mockResponse();
+      container.rebind(TYPES.services.AuthService).toConstantValue(authServiceMock);
+      const authRoutes = new AuthRoutes();
 
-    // Act
-    await authRoutes.signup(req, res as Response);
+      // Act
+      await authRoutes.signup(req, res as Response);
 
-    // Assert
-    expect(authServiceMock.signUp).toHaveBeenCalledWith(req.body);
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ user, tokens }));
+      // Assert
+      expect(authServiceMock.signUp).toHaveBeenCalledWith(req.body);
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ user, tokens }));
+    });
   });
 });
