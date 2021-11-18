@@ -25,17 +25,19 @@ describe('/auth routes', () => {
 
   it(`POST ${routePrefix}/signup should create (register) user`, async () => {
     expect.hasAssertions();
+
+    // Act
     const response = await agent
       .post(`${routePrefix}/signup`)
       .send(user)
       .expect(201);
 
+    // Assert
     const { user: resUser, tokens: { access, refresh } } = response.body;
     expect(resUser.userName).toBe(user.userName);
     expect(resUser.email).toBe(user.email);
     /** We should remove encrypted password from response */
     expect(resUser.password).toBeUndefined();
-
     expect(jwt.verify(access, config.accessTokenSalt)).toBeTruthy();
     /** Should be valid uuid */
     expect(uuidValidate(refresh)).toBeTruthy();
@@ -43,11 +45,14 @@ describe('/auth routes', () => {
 
   it(`POST ${routePrefix}/signup with wrong data should return 422 status`, async () => {
     expect.hasAssertions();
+
+    // Act
     const response = await agent
       .post(`${routePrefix}/signup`)
       .send({ ...user, userName: '' })
       .expect(422);
 
+    // Assert
     const { message } = response.body;
     expect(message).toBe('"userName" is not allowed to be empty');
   });

@@ -17,14 +17,22 @@ jest.mock('express', () => ({
 describe('auth routes test', () => {
   it('should call Router() and intializeRoutes() immediately after instance creation', () => {
     expect.hasAssertions();
+
+    // Arrange
     jest.spyOn(AuthRoutes.prototype, 'intializeRoutes');
+
+    // Act
     const authRoutes = new AuthRoutes();
+
+    // Assert
     expect(Router).toHaveBeenCalledTimes(1);
     expect(authRoutes.intializeRoutes).toHaveBeenCalledTimes(1);
   });
 
-  it('should call AuthSercive.signUp() and return user', async () => {
+  it('should call AuthService.signUp() and return user', async () => {
     expect.hasAssertions();
+
+    // Arrange
     const user = { userName: 'John', email: 'test@test.com', password: 'pass' };
     const tokens = {
       access: jwt.sign(user, config.accessTokenSalt),
@@ -35,7 +43,11 @@ describe('auth routes test', () => {
     const res = mockResponse();
     container.rebind(TYPES.services.AuthService).toConstantValue(authServiceMock);
     const authRoutes = new AuthRoutes();
+
+    // Act
     await authRoutes.signup(req, res as Response);
+
+    // Assert
     expect(authServiceMock.signUp).toHaveBeenCalledWith(req.body);
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ user, tokens }));
