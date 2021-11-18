@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import faker from 'faker';
 
 import { mockResponse, mockRequest } from '@/tests/mocks/express';
 import container from '@/ioc';
@@ -33,7 +34,11 @@ describe('auth routes test', () => {
     expect.hasAssertions();
 
     // Arrange
-    const user = { userName: 'John', email: 'test@test.com', password: 'pass' };
+    const user = {
+      userName: faker.internet.userName(),
+      password: faker.internet.password(),
+      email: faker.internet.email().toLowerCase(),
+    };
     const tokens = {
       access: jwt.sign(user, config.accessTokenSalt),
       refresh: uuidv4(),

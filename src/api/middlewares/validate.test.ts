@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import Joi from 'joi';
 import { Boom } from '@hapi/boom';
+import faker from 'faker';
 
 import { mockResponse, mockRequest } from '@/tests/mocks/express';
 import validate from '@/api/middlewares/validate';
@@ -14,7 +15,7 @@ describe('validate middleware test', () => {
     expect.hasAssertions();
 
     // Arrange
-    const req = mockRequest({ body: { userName: 'John' } });
+    const req = mockRequest({ body: { userName: faker.internet.userName() } });
     const res = mockResponse();
     const nextFunc = jest.fn();
 
