@@ -2,7 +2,8 @@
   "extends": [
     "airbnb-base",
     "airbnb-typescript/base",
-    "plugin:jest/all"
+    "plugin:jest/all",
+    "plugin:security/recommended"
   ],
   "parserOptions": {
     "project": "./tsconfig.json"

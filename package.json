@@ -37,6 +37,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jest": "^25.2.4",
+    "eslint-plugin-security": "^1.4.0",
     "faker": "^5.5.3",
     "husky": "^4.3.8",
     "jest": "^27.3.1",
