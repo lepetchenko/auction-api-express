@@ -10,6 +10,7 @@ const boomError = boomify(new Error(), { message: 'boom error', statusCode: 404 
 
 describe('handleError middleware test', () => {
   it('should 500 if unknown error', () => {
+    expect.hasAssertions();
     const req = mockRequest();
     const res = mockResponse();
     handleError(mockError, req, res as Response, jest.fn());
@@ -18,6 +19,7 @@ describe('handleError middleware test', () => {
   });
 
   it('should pass code and message from Boom error', () => {
+    expect.hasAssertions();
     const req = mockRequest();
     const res = mockResponse();
     handleError(boomError, req, res as Response, jest.fn());

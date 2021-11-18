@@ -14,15 +14,17 @@ jest.mock('express', () => ({
   }),
 }));
 
-describe('AuthRoutes test', () => {
+describe('auth routes test', () => {
   it('should call Router() and intializeRoutes() immediately after instance creation', () => {
+    expect.hasAssertions();
     jest.spyOn(AuthRoutes.prototype, 'intializeRoutes');
     const authRoutes = new AuthRoutes();
     expect(Router).toHaveBeenCalledTimes(1);
-    expect(authRoutes.intializeRoutes).toBeCalledTimes(1);
+    expect(authRoutes.intializeRoutes).toHaveBeenCalledTimes(1);
   });
 
   it('should call AuthSercive.signUp() and return user', async () => {
+    expect.hasAssertions();
     const user = { userName: 'John', email: 'test@test.com', password: 'pass' };
     const tokens = {
       access: jwt.sign(user, config.accessTokenSalt),

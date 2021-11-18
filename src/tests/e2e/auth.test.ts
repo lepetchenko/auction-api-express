@@ -1,33 +1,18 @@
-import mongoose from 'mongoose';
 import request from 'supertest';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import jwt from 'jsonwebtoken';
 import { validate as uuidValidate } from 'uuid';
 
+import { connect, disconnect } from '@/tests/setup/mongoose';
 import App from '@/App';
 import config from '@/config';
-
-let mongoServer: MongoMemoryServer;
-
-beforeEach(async () => {
-  await mongoose.disconnect();
-  mongoServer = await MongoMemoryServer.create();
-  const mongoUri = mongoServer.getUri();
-  await mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-  });
-});
-
-afterEach(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
-});
 
 const routePrefix = '/auth';
 
 describe('/auth routes', () => {
+  beforeEach(connect);
+
+  afterEach(disconnect);
+
   const { app } = new App();
 
   const agent = request(app);
@@ -38,30 +23,32 @@ describe('/auth routes', () => {
     email: 'john@gmail.com',
   };
 
-  it(`POST ${routePrefix}/signup should create (register) user`, (done) => {
-    agent
+  it(`POST ${routePrefix}/signup should create (register) user`, async () => {
+    expect.hasAssertions();
+    const response = await agent
       .post(`${routePrefix}/signup`)
       .send(user)
-      .expect(201)
-      .then((response) => {
-        const { user: resUser, tokens: { access, refresh } } = response.body;
-        expect(resUser.userName).toBe(user.userName);
-        expect(resUser.email).toBe(user.email);
-        /** We should remove encrypted password from response */
-        expect(resUser.password).toBe(undefined);
+      .expect(201);
 
-        expect(jwt.verify(access, config.accessTokenSalt));
-        /** Should be valid uuid */
-        expect(uuidValidate(refresh));
-        done();
-      })
-      .catch((err) => done(err));
+    const { user: resUser, tokens: { access, refresh } } = response.body;
+    expect(resUser.userName).toBe(user.userName);
+    expect(resUser.email).toBe(user.email);
+    /** We should remove encrypted password from response */
+    expect(resUser.password).toBeUndefined();
+
+    expect(jwt.verify(access, config.accessTokenSalt)).toBeTruthy();
+    /** Should be valid uuid */
+    expect(uuidValidate(refresh)).toBeTruthy();
   });
 
-  it(`POST ${routePrefix}/signup with wrong data should return 422 status`, (done) => {
-    agent
+  it(`POST ${routePrefix}/signup with wrong data should return 422 status`, async () => {
+    expect.hasAssertions();
+    const response = await agent
       .post(`${routePrefix}/signup`)
       .send({ ...user, userName: '' })
-      .expect(422, done);
+      .expect(422);
+
+    const { message } = response.body;
+    expect(message).toBe('"userName" is not allowed to be empty');
   });
 });

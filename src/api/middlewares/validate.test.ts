@@ -11,6 +11,7 @@ const validationSchema = Joi.object({
 
 describe('validate middleware test', () => {
   it('should once call next callback if validation is passed', () => {
+    expect.hasAssertions();
     const req = mockRequest({ body: { userName: 'John' } });
     const res = mockResponse();
     const nextFunc = jest.fn();
@@ -19,6 +20,7 @@ describe('validate middleware test', () => {
   });
 
   it('should throw Boom error if body is empty', () => {
+    expect.hasAssertions();
     const req = mockRequest({ body: {} });
     const res = mockResponse();
     const nextFunc = jest.fn();
@@ -28,6 +30,7 @@ describe('validate middleware test', () => {
   });
 
   it('should throw Boom error if body does not correspond to validation schema', () => {
+    expect.hasAssertions();
     const req = mockRequest({ body: { userName: '' } });
     const res = mockResponse();
     const nextFunc = jest.fn();
