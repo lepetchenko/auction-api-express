@@ -1,40 +1,42 @@
-import { Response } from 'express';
 import { boomify } from '@hapi/boom';
+import httpMocks from 'node-mocks-http';
 
-import { mockResponse, mockRequest } from '@/tests/mocks/express';
 import handleError from '@/api/middlewares/handleError';
-
-const boomError = boomify(new Error(), { message: 'boom error', statusCode: 404 });
 
 describe('handleError middleware test', () => {
   it('should 500 if unknown error', () => {
     expect.hasAssertions();
 
     // Arrange
-    const req = mockRequest();
-    const res = mockResponse();
     const mockError = new Error();
+    const { req, res } = httpMocks.createMocks();
+    const nextFn = jest.fn();
 
     // Act
-    handleError(mockError, req, res as Response, jest.fn());
+    handleError(mockError, req, res, nextFn);
 
     // Assert
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Internal sever error' });
+    const data = res._getJSONData();
+    expect(res.statusCode).toBe(500);
+    expect(data).toStrictEqual({ message: 'Internal sever error' });
   });
 
   it('should pass code and message from Boom error', () => {
     expect.hasAssertions();
 
     // Arrange
-    const req = mockRequest();
-    const res = mockResponse();
+    const errorMessage = 'boom error';
+    const errorStatusCode = 404;
+    const boomError = boomify(new Error(), { message: errorMessage, statusCode: errorStatusCode });
+    const { req, res } = httpMocks.createMocks();
+    const nextFn = jest.fn();
 
     // Act
-    handleError(boomError, req, res as Response, jest.fn());
+    handleError(boomError, req, res, nextFn);
 
     // Assert
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: 'boom error' });
+    const data = res._getJSONData();
+    expect(res.statusCode).toBe(errorStatusCode);
+    expect(data).toStrictEqual({ message: errorMessage });
   });
 });

@@ -1,9 +1,9 @@
-import { Router, Response } from 'express';
+import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import faker from 'faker';
+import httpMocks from 'node-mocks-http';
 
-import { mockResponse, mockRequest } from '@/tests/mocks/express';
 import container from '@/ioc';
 import TYPES from '@/constants/types';
 import AuthRoutes from './AuthRoutes';
@@ -45,18 +45,18 @@ describe('auth routes test', () => {
         refresh: uuidv4(),
       };
       const authServiceMock = { signUp: jest.fn().mockReturnValue({ user, tokens }) };
-      const req = mockRequest({ body: user });
-      const res = mockResponse();
+      const { req, res } = httpMocks.createMocks({ body: user });
       container.rebind(TYPES.services.AuthService).toConstantValue(authServiceMock);
       const authRoutes = new AuthRoutes();
 
       // Act
-      await authRoutes.signup(req, res as Response);
+      await authRoutes.signup(req, res);
 
       // Assert
+      const data = res._getJSONData();
       expect(authServiceMock.signUp).toHaveBeenCalledWith(req.body);
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ user, tokens }));
+      expect(res.statusCode).toBe(201);
+      expect(data).toStrictEqual({ user, tokens });
     });
   });
 });

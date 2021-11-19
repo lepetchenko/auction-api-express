@@ -62,8 +62,7 @@ describe(`${routePrefix} routes`, () => {
         .expect(422);
 
       // Assert
-      const { message } = response.body;
-      expect(message).toBe('"userName" is not allowed to be empty');
+      expect(response.body).toStrictEqual({ message: '"userName" is not allowed to be empty' });
     });
   });
 });

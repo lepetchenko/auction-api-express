@@ -27,7 +27,8 @@
   },
   "rules": {
     "jest/no-hooks": 0,
-    "jest/require-hook": 0
+    "jest/require-hook": 0,
+    "no-underscore-dangle": 0
   },
   "env": {
     "jest/globals": true

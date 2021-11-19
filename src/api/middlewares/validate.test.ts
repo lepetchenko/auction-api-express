@@ -1,9 +1,8 @@
-import { Response } from 'express';
 import Joi from 'joi';
 import { Boom } from '@hapi/boom';
 import faker from 'faker';
+import httpMocks from 'node-mocks-http';
 
-import { mockResponse, mockRequest } from '@/tests/mocks/express';
 import validate from '@/api/middlewares/validate';
 
 const validationSchema = Joi.object({
@@ -15,12 +14,11 @@ describe('validate middleware test', () => {
     expect.hasAssertions();
 
     // Arrange
-    const req = mockRequest({ body: { userName: faker.internet.userName() } });
-    const res = mockResponse();
+    const { req, res } = httpMocks.createMocks({ body: { userName: faker.internet.userName() } });
     const nextFunc = jest.fn();
 
     // Act
-    validate(validationSchema, 'body')(req, res as Response, nextFunc);
+    validate(validationSchema, 'body')(req, res, nextFunc);
 
     // Assert
     expect(nextFunc).toHaveBeenCalledTimes(1);
@@ -30,12 +28,11 @@ describe('validate middleware test', () => {
     expect.hasAssertions();
 
     // Arrange
-    const req = mockRequest({ body: {} });
-    const res = mockResponse();
+    const { req, res } = httpMocks.createMocks();
     const nextFunc = jest.fn();
 
     // Act
-    const toValidate = () => validate(validationSchema, 'body')(req, res as Response, nextFunc);
+    const toValidate = () => validate(validationSchema, 'body')(req, res, nextFunc);
 
     // Assert
     expect(toValidate).toThrow(Boom);
@@ -46,12 +43,11 @@ describe('validate middleware test', () => {
     expect.hasAssertions();
 
     // Arrange
-    const req = mockRequest({ body: { userName: '' } });
-    const res = mockResponse();
+    const { req, res } = httpMocks.createMocks({ body: { userName: '' } });
     const nextFunc = jest.fn();
 
     // Act
-    const toValidate = () => validate(validationSchema, 'body')(req, res as Response, nextFunc);
+    const toValidate = () => validate(validationSchema, 'body')(req, res, nextFunc);
 
     // Assert
     expect(toValidate).toThrow(Boom);
