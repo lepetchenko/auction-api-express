@@ -12,15 +12,12 @@ import logRequest from '@/api/middlewares/logRequest';
 class App implements IApp {
   public app: express.Application;
 
-  public port: number;
-
   constructor() {
     this.app = express();
-    this.port = config.port;
 
     this.initializeMiddlewares();
     this.initializeRoutes();
-    this.initializeMongoose();
+    this.initializeDataBaseORM();
   }
 
   private initializeMiddlewares = () => {
@@ -34,14 +31,14 @@ class App implements IApp {
     this.app.use(handleError);
   };
 
-  private initializeMongoose = () => {
+  private initializeDataBaseORM = () => {
     mongooseLoader();
   };
 
   public listen = () => {
-    this.app.listen(this.port, () => {
+    this.app.listen(config.port, () => {
       // eslint-disable-next-line no-console
-      console.log(`The application is listening on port ${this.port}!`);
+      console.log(`The application is listening on port ${config.port}!`);
     });
   };
 }
