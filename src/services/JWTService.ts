@@ -1,6 +1,7 @@
 import { injectable, inject } from 'inversify';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import { LeanDocument } from 'mongoose';
 
 import config from '@/config';
 import { IUser } from '@/interfaces/IUser';
@@ -25,7 +26,7 @@ export default class JWTService implements IJWTService {
 
   public createRefreshToken = (): string => uuidv4();
 
-  public createAndStoreTokens = async ({ id }: IUser) => {
+  public createAndStoreTokens = async ({ id }: LeanDocument<IUser>) => {
     const access = this.createAccessToken(id);
     const refresh = this.createRefreshToken();
 

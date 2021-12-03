@@ -35,4 +35,20 @@ export default class AuthService implements IAuthService {
 
     return { user, tokens };
   };
+
+  public signIn = async (userInputDTO: IUserInputDTO) => {
+    const { userName, password, email } = userInputDTO;
+
+    const user = await this.userModel.signIn({
+      userName,
+      password,
+      email,
+    });
+
+    this.eventBus.emit(EVENTS.auth.signIn, user);
+
+    const tokens = await this.JWTService.createAndStoreTokens(user);
+
+    return { user, tokens };
+  };
 }

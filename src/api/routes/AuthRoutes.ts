@@ -19,12 +19,19 @@ class AuthRoutes implements IRoutes {
 
   intializeRoutes(): void {
     this.router.post('/signup', validate(userInput), errorWrap(this.signup));
+    this.router.post('/signin', validate(userInput), errorWrap(this.signin));
   }
 
   signup = async (req: Request, res: Response) => {
     const { user, tokens } = await this.authService.signUp(req.body);
 
     res.status(201).json({ user, tokens });
+  };
+
+  signin = async (req: Request, res: Response) => {
+    const { user, tokens } = await this.authService.signIn(req.body);
+
+    res.status(200).json({ user, tokens });
   };
 }
 

@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { badData } from '@hapi/boom';
+import { Schema, model, LeanDocument } from 'mongoose';
+import { badData, unauthorized } from '@hapi/boom';
 import argon2 from 'argon2';
 
 import { IUser, IUserModel, IUserInputDTO } from '@/interfaces/IUser';
@@ -56,6 +56,21 @@ userSchema.statics = {
 
     const hashedPassword = await argon2.hash(password);
     const userRecord = await this.create({ ...userInput, password: hashedPassword });
+    const user = userRecord.toObject();
+    Reflect.deleteProperty(user, 'password');
+
+    return user;
+  },
+  async signIn(userInput: IUserInputDTO): Promise<LeanDocument<IUser>> {
+    const { userName, email, password } = userInput;
+    const userRecord = await this.findOne({ $or: [{ userName }, { email }] });
+
+    if (!userRecord) { throw unauthorized('Invalid user credentials.'); }
+
+    const isPasswordValid = await argon2.verify(userRecord.password, password);
+
+    if (!isPasswordValid) { throw unauthorized('Invalid user credentials.'); }
+
     const user = userRecord.toObject();
     Reflect.deleteProperty(user, 'password');
 
