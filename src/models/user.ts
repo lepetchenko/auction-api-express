@@ -41,7 +41,7 @@ const userSchema = new Schema<IUser, IUserModel>(
 );
 
 userSchema.statics = {
-  async checkAndCreate(userInput: IUserInputDTO) {
+  async signUp(userInput: IUserInputDTO): Promise<LeanDocument<IUser>> {
     const throwError = (field: string) => {
       throw badData(`User with this ${field} already exists`);
     };

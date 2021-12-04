@@ -16,6 +16,6 @@ export interface IUserInputDTO {
 }
 
 export interface IUserModel extends Model<IUser> {
-  checkAndCreate: Model<IUser>['create'],
+  signUp(userInput: IUserInputDTO): Promise<LeanDocument<IUser>>,
   signIn(userInput: IUserInputDTO): Promise<LeanDocument<IUser>>,
 }

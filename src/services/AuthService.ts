@@ -23,7 +23,7 @@ export default class AuthService implements IAuthService {
   public signUp = async (userInputDTO: IUserInputDTO) => {
     const { userName, password, email } = userInputDTO;
 
-    const user = await this.userModel.checkAndCreate({
+    const user = await this.userModel.signUp({
       userName,
       password,
       email,
