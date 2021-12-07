@@ -20,4 +20,5 @@ export default {
   accessTokenSalt: process.env.ACCESS_TOKEN_SALT,
   accessTokenLifeDuration: Number(process.env.ACCESS_TOKEN_LIFE_DURATION) * 1000,
   refreshTokenLifeDuration: Number(process.env.REFRESH_TOKEN_LIFE_DURATION) * 1000,
+  tgBotToken: process.env.TG_BOT_TOKEN,
 };
