@@ -16,15 +16,21 @@ class App implements IApp {
 
   constructor() {
     this.app = express();
-
-    this.initializeMiddlewares();
-    this.initializeRoutes();
-    this.initializeDataBaseORM();
-    this.initializeListeners();
+    this.initApp();
   }
 
-  private initializeListeners = () => {
-    container.get<ITelegramService>(TYPES.services.TelegramService);
+  private initApp = async () => {
+    await this.initializeDataBaseORM();
+    this.initializeMiddlewares();
+    this.initializeRoutes();
+    this.initializeListeners();
+    this.listen();
+  };
+
+  private initializeDataBaseORM = async () => {
+    await mongooseLoader();
+    // eslint-disable-next-line no-console
+    console.log('Mongoose connected');
   };
 
   private initializeMiddlewares = () => {
@@ -38,11 +44,11 @@ class App implements IApp {
     this.app.use(handleError);
   };
 
-  private initializeDataBaseORM = () => {
-    mongooseLoader();
+  private initializeListeners = () => {
+    container.get<ITelegramService>(TYPES.services.TelegramService);
   };
 
-  public listen = () => {
+  private listen = () => {
     this.app.listen(config.port, () => {
       // eslint-disable-next-line no-console
       console.log(`The application is listening on port ${config.port}!`);
@@ -50,4 +56,4 @@ class App implements IApp {
   };
 }
 
-export default App;
+export default new App();
