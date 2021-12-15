@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
+import { injectable, inject } from 'inversify';
 
-import container from '@/ioc';
 import TYPES from '@/constants/types';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IRoutes } from '@/interfaces/IRoutes';
@@ -8,12 +8,13 @@ import validate from '@/api/middlewares/validate';
 import { userSignInScheme, userSignUpScheme } from '@/validation/schemas';
 import { errorWrap } from '@/common/utils';
 
+@injectable()
 class AuthRoutes implements IRoutes {
   public router: Router = Router();
 
-  private authService = container.get<IAuthService>(TYPES.services.AuthService);
-
-  constructor() {
+  constructor(
+    @inject(TYPES.services.AuthService) private authService: IAuthService,
+  ) {
     this.intializeRoutes();
   }
 

@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
 
+import AuthRoutes from '@/api/routes/AuthRoutes';
+
 import AuthService from '@/services/AuthService';
 import MailService from '@/services/MailService';
 import JWTService from '@/services/JWTService';
@@ -12,6 +14,7 @@ import TelegramBotUserChat from '@/models/telegramBotUserChat';
 
 import { eventBusInstance } from '@/decorators/EventBus';
 
+import { IRoutes } from '@/interfaces/IRoutes';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IMailService } from '@/interfaces/IMailService';
 import { IJWTService } from '@/interfaces/IJWTService';
@@ -24,6 +27,9 @@ import { ITelegramService } from '@/interfaces/ITelegramService';
 import TYPES from '@/constants/types';
 
 const container = new Container();
+
+// Routes
+container.bind<IRoutes>(TYPES.routes.AuthRoutes).to(AuthRoutes);
 
 // Services
 container.bind<IAuthService>(TYPES.services.AuthService).to(AuthService);

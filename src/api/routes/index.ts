@@ -1,14 +1,19 @@
 import { Router } from 'express';
 
-import AuthRoutes from './AuthRoutes';
+import container from '@/ioc';
+import { IRoutes } from '@/interfaces/IRoutes';
+import TYPES from '@/constants/types';
 
 const routesArray = [
-  { pathPrefix: '/auth', routesStack: new AuthRoutes() },
+  { pathPrefix: '/auth', type: TYPES.routes.AuthRoutes },
 ];
 
 export default () => {
   const app = Router();
-  routesArray.forEach(({ pathPrefix, routesStack }) => app.use(pathPrefix, routesStack.router));
+  routesArray.forEach(({ pathPrefix, type }) => app.use(
+    pathPrefix,
+    (container.get<IRoutes>(type)).router,
+  ));
 
   return app;
 };

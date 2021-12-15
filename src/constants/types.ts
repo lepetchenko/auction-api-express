@@ -1,4 +1,7 @@
 const TYPES = {
+  routes: {
+    AuthRoutes: Symbol('AuthRoutes'),
+  },
   services: {
     AuthService: Symbol('AuthService'),
     MailService: Symbol('MailService'),
