@@ -5,7 +5,7 @@ import TYPES from '@/constants/types';
 import { IAuthService } from '@/interfaces/IAuthService';
 import { IRoutes } from '@/interfaces/IRoutes';
 import validate from '@/api/middlewares/validate';
-import userInput from '@/validation-schemas/userInput';
+import { userSignInScheme, userSignUpScheme } from '@/validation/schemas';
 import { errorWrap } from '@/common/utils';
 
 class AuthRoutes implements IRoutes {
@@ -18,8 +18,8 @@ class AuthRoutes implements IRoutes {
   }
 
   intializeRoutes(): void {
-    this.router.post('/signup', validate(userInput), errorWrap(this.signup));
-    this.router.post('/signin', validate(userInput), errorWrap(this.signin));
+    this.router.post('/signup', validate(userSignUpScheme), errorWrap(this.signup));
+    this.router.post('/signin', validate(userSignInScheme), errorWrap(this.signin));
   }
 
   signup = async (req: Request, res: Response) => {
