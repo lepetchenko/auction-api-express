@@ -2,7 +2,6 @@ import Joi from 'joi';
 import * as valuesValidators from '@/validation/valuesValidators';
 
 export const userSignInScheme = Joi.object({
-  userName: valuesValidators.userName.required(),
   email: valuesValidators.email.required(),
   password: valuesValidators.password.required(),
 });
