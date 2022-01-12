@@ -6,6 +6,7 @@ import TYPES from '@/constants/types';
 
 const routesArray = [
   { pathPrefix: '/auth', type: TYPES.routes.AuthRoutes },
+  { pathPrefix: '/auction', type: TYPES.routes.AuctionRoutes },
 ];
 
 export default () => {
