@@ -19,15 +19,34 @@ class AuthRoutes implements IRoutes {
   }
 
   intializeRoutes() {
-    this.router.post('/', validate(auctionDataSchema), errorWrap(this.createAuction));
-    this.router.get('/:id', validate(entityIdSchema, 'params'), errorWrap(this.getAuction));
+    // Create
+    this.router.post(
+      '/',
+      validate(auctionDataSchema),
+      errorWrap(this.createAuction),
+    );
+
+    // Read
+    this.router.get(
+      '/:id',
+      validate(entityIdSchema, 'params'),
+      errorWrap(this.getAuction),
+    );
+
+    // Update
     this.router.patch(
       '/:id',
       validate(auctionDataSchema),
       validate(entityIdSchema, 'params'),
       errorWrap(this.patchAuction),
     );
-    this.router.delete('/:id', validate(entityIdSchema, 'params'), errorWrap(this.deleteAuction));
+
+    // Delete
+    this.router.delete(
+      '/:id',
+      validate(entityIdSchema, 'params'),
+      errorWrap(this.deleteAuction),
+    );
     // TODO add 'manualStart' handler
   }
 
