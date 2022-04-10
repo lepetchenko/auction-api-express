@@ -1,12 +1,13 @@
-import { Model, Document, LeanDocument } from 'mongoose';
+import { Model, Document, Types } from 'mongoose';
 
-export interface IUser extends Document {
-  _id: string;
+// eslint-disable-next-line import/no-cycle
+import { IAuctionDocument } from '@/interfaces/IAuction';
+
+export interface IUserBaseDocument extends Document {
+  auctions: Array<Types.ObjectId | Record<string, unknown>>
   userName: string;
   email: string;
   password: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface IUserInputDTO {
@@ -15,7 +16,15 @@ export interface IUserInputDTO {
   password: string;
 }
 
-export interface IUserModel extends Model<IUser> {
-  signUp(userInput: IUserInputDTO): Promise<LeanDocument<IUser>>,
-  signIn(userInput: IUserInputDTO): Promise<LeanDocument<IUser>>,
+export interface IUserDocument extends IUserBaseDocument {
+  auctions: Array<IAuctionDocument['_id']>;
+}
+
+export interface IUserPopulatedDocument extends IUserBaseDocument {
+  auctions: Array<IAuctionDocument>;
+}
+
+export interface IUserModel extends Model<IUserDocument> {
+  signUp(userInput: IUserInputDTO): Promise<IUserDocument>,
+  signIn(userInput: IUserInputDTO): Promise<IUserDocument>,
 }

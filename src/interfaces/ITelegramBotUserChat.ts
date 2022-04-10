@@ -1,11 +1,17 @@
 import { Model, Document } from 'mongoose';
+import { IUserDocument } from '@/interfaces/IUser';
 
-export interface ITelegramBotUserChat extends Document {
-  _id: string;
-  userId: string;
+export interface ITelegramBotUserChatBaseDocument extends Document {
+  user: string;
   chatId: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export interface ITelegramBotUserChatModel extends Model<ITelegramBotUserChat> {}
+export interface ITelegramBotUserChatDocument extends ITelegramBotUserChatBaseDocument {
+  user: IUserDocument['_id'];
+}
+
+export interface ITelegramBotUserChatPopulatedDocument extends ITelegramBotUserChatBaseDocument {
+  user: IUserDocument;
+}
+
+export interface ITelegramBotUserChatModel extends Model<ITelegramBotUserChatDocument> {}

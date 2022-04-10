@@ -1,11 +1,10 @@
 import { Schema, model } from 'mongoose';
 
-import { IRefreshToken } from '@/interfaces/IRefreshToken';
-import { ITelegramBotUserChat } from '@/interfaces/ITelegramBotUserChat';
+import { ITelegramBotUserChatDocument } from '@/interfaces/ITelegramBotUserChat';
 
-const telegramBotUserChatSchema = new Schema<IRefreshToken>(
+const telegramBotUserChatSchema = new Schema<ITelegramBotUserChatDocument>(
   {
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'User',
@@ -19,6 +18,6 @@ const telegramBotUserChatSchema = new Schema<IRefreshToken>(
   { timestamps: true },
 );
 
-const TelegramBotUserChat = model<ITelegramBotUserChat>('TelegramBotUserChat', telegramBotUserChatSchema);
+const TelegramBotUserChat = model<ITelegramBotUserChatDocument>('TelegramBotUserChat', telegramBotUserChatSchema);
 
 export default TelegramBotUserChat;

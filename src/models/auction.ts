@@ -1,12 +1,13 @@
 import { Schema, model } from 'mongoose';
 
-import { IAuction } from '@/interfaces/IAuction';
+import { IAuctionDocument, IAuctionModel } from '@/interfaces/IAuction';
 
-const auctionSchema = new Schema<IAuction>(
+const auctionSchema = new Schema<IAuctionDocument, IAuctionModel>(
   {
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
     },
     title: {
       type: String,
@@ -40,6 +41,6 @@ const auctionSchema = new Schema<IAuction>(
   { timestamps: true },
 );
 
-const Auction = model<IAuction>('Auction', auctionSchema);
+const Auction = model<IAuctionDocument, IAuctionModel>('Auction', auctionSchema);
 
 export default Auction;

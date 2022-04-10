@@ -1,51 +1,39 @@
-import { Schema, model, LeanDocument } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { badData, unauthorized } from '@hapi/boom';
 import argon2 from 'argon2';
 
-import { IUser, IUserModel, IUserInputDTO } from '@/interfaces/IUser';
-import {
-  userName as userNameValidator,
-  email as emailValidator,
-  password as passwordValidator,
-} from '@/validation/valuesValidators';
+import { IUserDocument, IUserModel, IUserInputDTO } from '@/interfaces/IUser';
 
-const userSchema = new Schema<IUser, IUserModel>(
+const userSchema = new Schema<IUserDocument, IUserModel>(
   {
+    auctions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Auction',
+      required: true,
+    }],
     userName: {
       type: String,
-      required: [true, 'Please enter a user name'],
       index: true,
       unique: true,
-      validate: [
-        (userName: string) => !userNameValidator.validate(userName).error,
-        'Please enter a valid user name',
-      ],
+      required: true,
     },
     email: {
       type: String,
-      required: [true, 'Please enter an email name'],
       lowercase: true,
       unique: true,
       index: true,
-      validate: [
-        (email: string) => !emailValidator.validate(email).error,
-        'Please enter a valid email address',
-      ],
+      required: true,
     },
     password: {
       type: String,
-      required: [true, 'Please enter a password'],
-      validate: [
-        (email: string) => !passwordValidator.validate(email).error,
-        'Please enter a valid password',
-      ],
+      required: true,
     },
   },
   { timestamps: true },
 );
 
 userSchema.statics = {
-  async signUp(userInput: IUserInputDTO): Promise<LeanDocument<IUser>> {
+  async signUp(userInput: IUserInputDTO): Promise<IUserDocument> {
     const throwError = (field: string) => {
       throw badData(`User with this ${field} already exists`);
     };
@@ -60,12 +48,12 @@ userSchema.statics = {
 
     const hashedPassword = await argon2.hash(password);
     const userRecord = await this.create({ ...userInput, password: hashedPassword });
-    const user = userRecord.toObject();
+    const user = userRecord.toObject<IUserDocument>();
     Reflect.deleteProperty(user, 'password');
 
     return user;
   },
-  async signIn(userInput: IUserInputDTO): Promise<LeanDocument<IUser>> {
+  async signIn(userInput: IUserInputDTO): Promise<IUserDocument> {
     const throwError = () => {
       throw unauthorized('Invalid user Name or Password.');
     };
@@ -79,13 +67,13 @@ userSchema.statics = {
 
     if (!isPasswordValid) { return throwError(); }
 
-    const user = userRecord.toObject();
+    const user = userRecord.toObject<IUserDocument>();
     Reflect.deleteProperty(user, 'password');
 
     return user;
   },
 };
 
-const User = model<IUser, IUserModel>('User', userSchema);
+const User = model<IUserDocument, IUserModel>('User', userSchema);
 
 export default User;

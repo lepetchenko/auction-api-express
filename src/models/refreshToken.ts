@@ -1,12 +1,13 @@
 import { Schema, model } from 'mongoose';
 
-import { IRefreshToken } from '@/interfaces/IRefreshToken';
+import { IRefreshTokenDocument } from '@/interfaces/IRefreshToken';
 
-const refreshTokenSchema = new Schema<IRefreshToken>(
+const refreshTokenSchema = new Schema<IRefreshTokenDocument>(
   {
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
     },
     token: {
       type: String,
@@ -21,6 +22,6 @@ const refreshTokenSchema = new Schema<IRefreshToken>(
   { timestamps: true },
 );
 
-const RefreshToken = model<IRefreshToken>('RefreshToken', refreshTokenSchema);
+const RefreshToken = model<IRefreshTokenDocument>('RefreshToken', refreshTokenSchema);
 
 export default RefreshToken;

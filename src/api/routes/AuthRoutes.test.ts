@@ -30,8 +30,8 @@ describe('auth routes test', () => {
     expect(authRoutes.intializeRoutes).toHaveBeenCalledTimes(1);
   });
 
-  describe('test AuthService.signUp() method', () => {
-    it('should call AuthService.signUp() and return user', async () => {
+  describe('test AuthController.signUp() method', () => {
+    it('should call AuthController.signUp() and return user', async () => {
       expect.hasAssertions();
 
       // Arrange
@@ -46,7 +46,7 @@ describe('auth routes test', () => {
       };
       const authServiceMock = { signUp: jest.fn().mockReturnValue({ user, tokens }) };
       const { req, res } = httpMocks.createMocks({ body: user });
-      container.rebind(TYPES.services.AuthService).toConstantValue(authServiceMock);
+      container.rebind(TYPES.controllers.AuthController).toConstantValue(authServiceMock);
       const authRoutes = new AuthRoutes();
 
       // Act

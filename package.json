@@ -7,7 +7,7 @@
     "start": "nodemon",
     "test": "NODE_ENV=test jest --verbose",
     "test:watch": "NODE_ENV=test jest --verbose --watch",
-    "lint": "eslint ./src --ignore-path .gitignore --ext .ts"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
-import { IUser } from '@/interfaces/IUser';
+import { IUserDocument } from '@/interfaces/IUser';
 
 export interface IMailService {
-  sendWelcomeLetter(user: IUser): string;
+  sendWelcomeLetter(user: IUserDocument): string;
 }

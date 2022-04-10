@@ -3,12 +3,14 @@ const TYPES = {
     AuthRoutes: Symbol('AuthRoutes'),
     AuctionRoutes: Symbol('AuctionRoutes'),
   },
+  controllers: {
+    AuthController: Symbol('AuthController'),
+    AuctionController: Symbol('AuctionController'),
+  },
   services: {
-    AuthService: Symbol('AuthService'),
     MailService: Symbol('MailService'),
     JWTService: Symbol('JWTService'),
     TelegramService: Symbol('TelegramService'),
-    AuctionService: Symbol('AuctionService'),
   },
   models: {
     UserModel: Symbol('UserModel'),

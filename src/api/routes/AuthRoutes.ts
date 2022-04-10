@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { injectable, inject } from 'inversify';
 
 import TYPES from '@/constants/types';
-import { IAuthService } from '@/interfaces/IAuthService';
+import { IAuthController } from '@/interfaces/IAuthController';
 import { IRoutes } from '@/interfaces/IRoutes';
 import validate from '@/api/middlewares/validate';
 import { userSignInScheme, userSignUpScheme } from '@/validation/schemas';
@@ -13,7 +13,7 @@ class AuthRoutes implements IRoutes {
   public router: Router = Router();
 
   constructor(
-    @inject(TYPES.services.AuthService) private authService: IAuthService,
+    @inject(TYPES.controllers.AuthController) private authController: IAuthController,
   ) {
     this.intializeRoutes();
   }
@@ -24,13 +24,13 @@ class AuthRoutes implements IRoutes {
   }
 
   signup = async (req: Request, res: Response) => {
-    const { user, tokens } = await this.authService.signUp(req.body);
+    const { user, tokens } = await this.authController.signUp(req.body);
 
     res.status(201).json({ user, tokens });
   };
 
   signin = async (req: Request, res: Response) => {
-    const { user, tokens } = await this.authService.signIn(req.body);
+    const { user, tokens } = await this.authController.signIn(req.body);
 
     res.status(200).json({ user, tokens });
   };

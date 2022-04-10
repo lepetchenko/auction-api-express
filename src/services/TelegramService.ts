@@ -1,8 +1,7 @@
-import { LeanDocument } from 'mongoose';
 import { injectable, inject } from 'inversify';
 import TelegramBot from 'node-telegram-bot-api';
 
-import { IUser } from '@/interfaces/IUser';
+import { IUserDocument } from '@/interfaces/IUser';
 import { ITelegramService } from '@/interfaces/ITelegramService';
 import { ITelegramBotUserChatModel } from '@/interfaces/ITelegramBotUserChat';
 import { IEventBus } from '@/interfaces/IEventBus';
@@ -28,8 +27,8 @@ export default class TelegramService implements ITelegramService {
     this.eventBus.on(EVENTS.auth.signIn, this.signInWarn);
   };
 
-  signInWarn = async ({ _id, userName }: LeanDocument<IUser>) => {
-    const chat = await this.tgUserChat.findOne({ userId: _id });
+  signInWarn = async ({ _id, userName }: IUserDocument) => {
+    const chat = await this.tgUserChat.findOne({ user: _id });
     if (chat) {
       this.bot.sendMessage(
         chat.chatId,

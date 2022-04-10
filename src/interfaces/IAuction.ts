@@ -1,8 +1,10 @@
-import { Model, Document } from 'mongoose';
+import { Types, Model, Document } from 'mongoose';
 
-export interface IAuction extends Document {
-  _id: string;
-  userId: string;
+// eslint-disable-next-line import/no-cycle
+import { IUserDocument } from '@/interfaces/IUser';
+
+export interface IAuctionBaseDocument extends Document {
+  user: Types.ObjectId | Record<string, unknown>;
   title: string;
   description: string;
   scheduledStart: string;
@@ -10,8 +12,14 @@ export interface IAuction extends Document {
   initialPrice: number;
   actualPrice: number;
   bidStep: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export interface IAuctionModel extends Model<IAuction> {}
+export interface IAuctionDocument extends IAuctionBaseDocument {
+  user: IUserDocument['_id'];
+}
+
+export interface IAuctionPopulatedDocument extends IAuctionBaseDocument {
+  user: IUserDocument;
+}
+
+export interface IAuctionModel extends Model<IAuctionDocument> {}

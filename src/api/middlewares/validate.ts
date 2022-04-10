@@ -12,7 +12,7 @@ export default (schema: Schema, property: 'body' | 'params' = 'body') => (
     next();
   } catch (error: any) {
     const { details } = error;
-    const message = details.map((i: { message:string }) => i.message).join(', ').replaceAll('"', '\'');
+    const message = details.map((i: { message: string }) => i.message).join(', ').replaceAll('"', '\'');
 
     throw badData(message);
   }

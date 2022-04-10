@@ -4,11 +4,11 @@ import { Container } from 'inversify';
 import AuthRoutes from '@/api/routes/AuthRoutes';
 import AuctionRoutes from '@/api/routes/AuctionRoutes';
 
-import AuthService from '@/services/AuthService';
+import Auth from '@/controllers/Auth';
 import MailService from '@/services/MailService';
 import JWTService from '@/services/JWTService';
 import TelegramService from '@/services/TelegramService';
-import AuctionService from '@/services/AuctionService';
+import Auction from '@/controllers/Auction';
 
 import UserModel from '@/models/user';
 import RefreshToken from '@/models/refreshToken';
@@ -18,11 +18,11 @@ import AuctionModel from '@/models/auction';
 import { eventBusInstance } from '@/decorators/EventBus';
 
 import { IRoutes } from '@/interfaces/IRoutes';
-import { IAuthService } from '@/interfaces/IAuthService';
+import { IAuthController } from '@/interfaces/IAuthController';
 import { IMailService } from '@/interfaces/IMailService';
 import { IJWTService } from '@/interfaces/IJWTService';
 import { ITelegramService } from '@/interfaces/ITelegramService';
-import { IAuctionService } from '@/interfaces/IAuctionService';
+import { IAuctionController } from '@/interfaces/IAuctionController';
 import { IUserModel } from '@/interfaces/IUser';
 import { IRefreshTokenModel } from '@/interfaces/IRefreshToken';
 import { IEventBus } from '@/interfaces/IEventBus';
@@ -37,12 +37,14 @@ const container = new Container();
 container.bind<IRoutes>(TYPES.routes.AuthRoutes).to(AuthRoutes);
 container.bind<IRoutes>(TYPES.routes.AuctionRoutes).to(AuctionRoutes);
 
+// Controllers
+container.bind<IAuctionController>(TYPES.controllers.AuctionController).to(Auction);
+container.bind<IAuthController>(TYPES.controllers.AuthController).to(Auth);
+
 // Services
-container.bind<IAuthService>(TYPES.services.AuthService).to(AuthService);
 container.bind<IMailService>(TYPES.services.MailService).to(MailService);
 container.bind<IJWTService>(TYPES.services.JWTService).to(JWTService);
 container.bind<ITelegramService>(TYPES.services.TelegramService).to(TelegramService);
-container.bind<IAuctionService>(TYPES.services.AuctionService).to(AuctionService);
 
 // Models
 container.bind<IUserModel>(TYPES.models.UserModel).toFunction(UserModel);

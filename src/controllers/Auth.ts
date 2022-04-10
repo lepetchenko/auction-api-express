@@ -1,16 +1,15 @@
 import { injectable, inject } from 'inversify';
 
 import { IUserInputDTO, IUserModel } from '@/interfaces/IUser';
-import { IAuthService } from '@/interfaces/IAuthService';
+import { IAuthController } from '@/interfaces/IAuthController';
 import { IEventBus } from '@/interfaces/IEventBus';
 import { IJWTService } from '@/interfaces/IJWTService';
 import TYPES from '@/constants/types';
 import EVENTS from '@/constants/events';
 
 @injectable()
-export default class AuthService implements IAuthService {
+export default class Auth implements IAuthController {
   public constructor(
-  // eslint-disable-next-line @typescript-eslint/indent
     @inject(TYPES.models.UserModel) private userModel: IUserModel,
     @inject(TYPES.decorators.EventBus) private eventBus: IEventBus,
     @inject(TYPES.services.JWTService) private JWTService: IJWTService,

@@ -1,13 +1,12 @@
-import { LeanDocument } from 'mongoose';
-import { IUser, IUserInputDTO } from '@/interfaces/IUser';
+import { IUserDocument, IUserInputDTO } from '@/interfaces/IUser';
 
-export interface IAuthService {
+export interface IAuthController {
   signUp(userInputDTO: IUserInputDTO): Promise<{
-    user: LeanDocument<IUser>,
+    user: IUserDocument,
     tokens: { access: string, refresh: string },
   }>;
   signIn(userInputDTO: IUserInputDTO): Promise<{
-    user: LeanDocument<IUser>,
+    user: IUserDocument,
     tokens: { access: string, refresh: string },
   }>;
 }
