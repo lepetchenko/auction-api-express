@@ -36,7 +36,7 @@ describe('validate middleware test', () => {
 
     // Assert
     expect(toValidate).toThrow(Boom);
-    expect(toValidate).toThrow('"userName" is required');
+    expect(toValidate).toThrow('\'userName\' is required');
   });
 
   it('should throw Boom error if body does not correspond to validation schema', () => {
@@ -51,6 +51,6 @@ describe('validate middleware test', () => {
 
     // Assert
     expect(toValidate).toThrow(Boom);
-    expect(toValidate).toThrow('"userName" is not allowed to be empty');
+    expect(toValidate).toThrow('\'userName\' is not allowed to be empty');
   });
 });

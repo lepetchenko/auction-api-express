@@ -8,6 +8,7 @@ import container from '@/ioc';
 import TYPES from '@/constants/types';
 import AuthRoutes from './AuthRoutes';
 import config from '@/config';
+import { IAuthRoutes } from '@/interfaces/IAuthRoutes';
 
 jest.mock('express', () => ({
   Router: jest.fn().mockReturnValue({
@@ -23,7 +24,7 @@ describe('auth routes test', () => {
     jest.spyOn(AuthRoutes.prototype, 'intializeRoutes');
 
     // Act
-    const authRoutes = new AuthRoutes();
+    const authRoutes = container.get<IAuthRoutes>(TYPES.routes.AuthRoutes);
 
     // Assert
     expect(Router).toHaveBeenCalledTimes(1);
@@ -44,17 +45,17 @@ describe('auth routes test', () => {
         access: jwt.sign(user, config.accessTokenSalt),
         refresh: uuidv4(),
       };
-      const authServiceMock = { signUp: jest.fn().mockReturnValue({ user, tokens }) };
+      const authControllerMock = { signUp: jest.fn().mockReturnValue({ user, tokens }) };
       const { req, res } = httpMocks.createMocks({ body: user });
-      container.rebind(TYPES.controllers.AuthController).toConstantValue(authServiceMock);
-      const authRoutes = new AuthRoutes();
+      container.rebind(TYPES.controllers.AuthController).toConstantValue(authControllerMock);
+      const authRoutes = container.get<IAuthRoutes>(TYPES.routes.AuthRoutes);
 
       // Act
       await authRoutes.signup(req, res);
 
       // Assert
       const data = res._getJSONData();
-      expect(authServiceMock.signUp).toHaveBeenCalledWith(req.body);
+      expect(authControllerMock.signUp).toHaveBeenCalledWith(req.body);
       expect(res.statusCode).toBe(201);
       expect(data).toStrictEqual({ user, tokens });
     });

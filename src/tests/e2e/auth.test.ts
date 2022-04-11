@@ -15,7 +15,7 @@ describe(`${routePrefix} routes`, () => {
 
   afterEach(disconnect);
 
-  const { app } = new App();
+  const { app } = App;
 
   describe(`${signupRoute} routes`, () => {
     it(`POST ${signupRoute} should create (register) user`, async () => {
@@ -62,7 +62,7 @@ describe(`${routePrefix} routes`, () => {
         .expect(422);
 
       // Assert
-      expect(response.body).toStrictEqual({ message: '"userName" is not allowed to be empty' });
+      expect(response.body).toStrictEqual({ message: '\'userName\' is not allowed to be empty' });
     });
   });
 });

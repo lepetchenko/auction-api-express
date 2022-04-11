@@ -30,7 +30,7 @@ class App implements IApp {
   private initializeDataBaseORM = async () => {
     await mongooseLoader();
     // eslint-disable-next-line no-console
-    console.log('Mongoose connected');
+    // console.log('Mongoose connected');
   };
 
   private initializeMiddlewares = () => {
@@ -51,7 +51,7 @@ class App implements IApp {
   private listen = () => {
     this.app.listen(config.port, () => {
       // eslint-disable-next-line no-console
-      console.log(`The application is listening on port ${config.port}!`);
+      // console.log(`The application is listening on port ${config.port}!`);
     });
   };
 }
