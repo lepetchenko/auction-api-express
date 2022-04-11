@@ -3,13 +3,13 @@ import { injectable, inject } from 'inversify';
 
 import TYPES from '@/constants/types';
 import { IAuthController } from '@/interfaces/IAuthController';
-import { IRoutes } from '@/interfaces/IRoutes';
+import { IAuthRoutes } from '@/interfaces/IAuthRoutes';
 import validate from '@/api/middlewares/validate';
 import { userSignInScheme, userSignUpScheme } from '@/validation/schemas';
 import { errorWrap } from '@/common/utils';
 
 @injectable()
-class AuthRoutes implements IRoutes {
+class AuthRoutes implements IAuthRoutes {
   public router: Router = Router();
 
   constructor(
