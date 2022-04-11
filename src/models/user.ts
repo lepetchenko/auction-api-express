@@ -38,7 +38,7 @@ userSchema.statics = {
       throw badData(`User with this ${field} already exists`);
     };
 
-    const { userName, email, password } = userInput;
+    const { userName, email } = userInput;
 
     const userWithSameUserName = await this.findOne({ userName });
     if (userWithSameUserName) { throwError('user name'); }
@@ -46,8 +46,7 @@ userSchema.statics = {
     const userWithSameEmail = await this.findOne({ email });
     if (userWithSameEmail) { throwError('email'); }
 
-    const hashedPassword = await argon2.hash(password);
-    const userRecord = await this.create({ ...userInput, password: hashedPassword });
+    const userRecord = await this.create(userInput);
     const user = userRecord.toObject<IUserDocument>();
     Reflect.deleteProperty(user, 'password');
 
@@ -73,6 +72,12 @@ userSchema.statics = {
     return user;
   },
 };
+
+userSchema.pre('save', async function () {
+  if (this.isModified('password')) {
+    this.password = await argon2.hash(this.password);
+  }
+});
 
 const User = model<IUserDocument, IUserModel>('User', userSchema);
 
