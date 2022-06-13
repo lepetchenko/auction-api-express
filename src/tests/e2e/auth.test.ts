@@ -1,32 +1,33 @@
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { validate as uuidValidate } from 'uuid';
-import faker from 'faker';
 
 import { connect, disconnect } from '@/tests/setup/mongoose';
 import App from '@/App';
 import config from '@/config';
+import { IUserInputDTO } from '@/interfaces/IUser';
+import fakeUserCreator from '@/tests/mocks/fakeUserCreator';
 
 const routePrefix = '/auth';
 const signupRoute = `${routePrefix}/signup`;
 
-describe(`${routePrefix} routes`, () => {
-  beforeEach(connect);
+let user: IUserInputDTO;
 
-  afterEach(disconnect);
+describe(`${routePrefix} routes`, () => {
+  beforeEach(async () => {
+    await connect();
+    user = fakeUserCreator();
+  });
+
+  afterEach(async () => {
+    await disconnect();
+  });
 
   const { app } = App;
 
   describe(`${signupRoute} routes`, () => {
     it(`POST ${signupRoute} should create (register) user`, async () => {
       expect.hasAssertions();
-
-      // Arrange
-      const user = {
-        userName: faker.internet.userName(),
-        password: faker.internet.password(),
-        email: faker.internet.email().toLowerCase(),
-      };
 
       // Act
       const response = await request(app)
@@ -49,11 +50,8 @@ describe(`${routePrefix} routes`, () => {
       expect.hasAssertions();
 
       // Arrange
-      const user = {
-        userName: '',
-        password: faker.internet.password(),
-        email: faker.internet.email(),
-      };
+      /** Empty userName is not acceptable */
+      user.userName = '';
 
       // Act
       const response = await request(app)

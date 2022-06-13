@@ -30,7 +30,8 @@
     "jest/require-hook": 0,
     "no-underscore-dangle": 0,
     "no-useless-return": 0,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/tests/**", "**/*.test.*"]}]
   },
   "env": {
     "jest/globals": true

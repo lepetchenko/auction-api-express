@@ -51,7 +51,7 @@ class App implements IApp {
   private listen = () => {
     this.app.listen(config.port, () => {
       // eslint-disable-next-line no-console
-      // console.log(`The application is listening on port ${config.port}!`);
+      console.log(`The application is listening on port ${config.port}!`);
     });
   };
 }

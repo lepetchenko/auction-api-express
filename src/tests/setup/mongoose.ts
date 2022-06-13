@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
