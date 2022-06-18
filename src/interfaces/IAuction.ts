@@ -3,14 +3,19 @@ import { Types, Model, Document } from 'mongoose';
 // eslint-disable-next-line import/no-cycle
 import { IUserDocument } from '@/interfaces/IUser';
 
-export interface IAuctionBaseDocument extends Document {
+export interface IAuctionBaseDocument extends Document, IAuctionDTO {
   user: Types.ObjectId | Record<string, unknown>;
+  scheduledStart: Date;
+  startedAt: Date;
+  actualPrice: number;
+}
+
+export interface IAuctionDTO {
   title: string;
   description: string;
-  scheduledStart: string;
-  startedAt: Date;
+  scheduledStart?: Date;
   initialPrice: number;
-  actualPrice: number;
+  actualPrice?: number;
   bidStep: number;
 }
 

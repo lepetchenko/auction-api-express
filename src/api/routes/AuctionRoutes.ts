@@ -51,7 +51,7 @@ class AuthRoutes implements IRoutes {
   }
 
   createAuction = async (req: Request, res: Response) => {
-    const auction = await this.auctionController.createAuction(req.body);
+    const auction = await this.auctionController.createAuction(req.body, req.user);
 
     res.status(201).json(auction);
   };

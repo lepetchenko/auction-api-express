@@ -1,9 +1,10 @@
-import { IAuctionDocument } from '@/interfaces/IAuction';
+import { IAuctionDocument, IAuctionDTO } from '@/interfaces/IAuction';
+import { IUserDocument } from '@/interfaces/IUser';
 
 export interface IAuctionController {
-  createAuction(auctionDTO: any): Promise<IAuctionDocument>;
+  createAuction(auctionDTO: IAuctionDTO, user: IUserDocument): Promise<IAuctionDocument>;
   getAuction(id: string): Promise<IAuctionDocument>;
-  putAuction(id: string, auctionDTO: any): Promise<IAuctionDocument>;
+  putAuction(id: string, auctionDTO: IAuctionDTO): Promise<IAuctionDocument>;
   deleteAuction(id: string): void;
   manualStart(id: string): Promise<IAuctionDocument>;
 }

@@ -3,9 +3,10 @@ import { injectable, inject } from 'inversify';
 import TYPES from '@/constants/types';
 import EVENTS from '@/constants/events';
 import { IAuctionController } from '@/interfaces/IAuctionController';
-import { IAuctionModel, IAuctionDocument } from '@/interfaces/IAuction';
+import { IAuctionModel, IAuctionDocument, IAuctionDTO } from '@/interfaces/IAuction';
 import { IEventBus } from '@/interfaces/IEventBus';
 import CommonController from './CommonController';
+import { IUserDocument } from '@/interfaces/IUser';
 
 @injectable()
 export default class Auction extends CommonController implements IAuctionController {
@@ -18,7 +19,9 @@ export default class Auction extends CommonController implements IAuctionControl
     this.eventBus = eventBus;
   }
 
-  public createAuction = async (auctionDTO: any) => this.auctionModel.create(auctionDTO);
+  public createAuction = async (auctionDTO: IAuctionDTO, user: IUserDocument) => (
+    this.auctionModel.create({ ...auctionDTO, user })
+  );
 
   public getAuction = async (id: string) => {
     const auction = await this.checkEntityExistence<IAuctionDocument>(this.auctionModel, id);
@@ -26,7 +29,7 @@ export default class Auction extends CommonController implements IAuctionControl
     return auction;
   };
 
-  public putAuction = async (id: string, auctionDTO: any) => {
+  public putAuction = async (id: string, auctionDTO: IAuctionDTO) => {
     const auction = await this.checkEntityExistence<IAuctionDocument>(this.auctionModel, id);
 
     await auction.overwrite({ ...auction, ...auctionDTO });

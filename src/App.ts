@@ -8,6 +8,7 @@ import config from '@/config';
 import { IApp } from '@/interfaces/IApp';
 import handleError from '@/api/middlewares/handleError';
 import logRequest from '@/api/middlewares/logRequest';
+import attachUser from '@/api/middlewares/attachUser';
 import TYPES from '@/constants/types';
 import { ITelegramService } from '@/interfaces/ITelegramService';
 
@@ -37,6 +38,7 @@ class App implements IApp {
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(bodyParser.json());
     this.app.use(logRequest);
+    this.app.use(attachUser);
   };
 
   private initializeRoutes = () => {
