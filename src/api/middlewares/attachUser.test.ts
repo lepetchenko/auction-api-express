@@ -89,6 +89,28 @@ describe('attachUser middleware test', () => {
     expect(nextFn).toHaveBeenCalledWith(unauthorized('Expired token'));
   });
 
+  it('should call next() with error if user not found', async () => {
+    expect.hasAssertions();
+
+    // Arrange
+    const user = fakeUserCreator();
+    const tokens = fakeTokensCreator(user);
+    const fakeModel = modelMockCreator({ methodName: 'findOne', returnValue: null });
+    container.rebind(TYPES.models.UserModel).toConstantValue(fakeModel);
+    const { req, res } = httpMocks.createMocks({
+      headers: {
+        Authorization: tokens.access,
+      },
+    });
+
+    // Act
+    await attachUser(req, res, nextFn);
+
+    // Assert
+    expect(nextFn).toHaveBeenCalledTimes(1);
+    expect(nextFn).toHaveBeenCalledWith(unauthorized('Invalid token (no user associated with provided jwt)'));
+  });
+
   it('should call next() with unknown error that was thrown by other service', async () => {
     expect.hasAssertions();
 

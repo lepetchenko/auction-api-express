@@ -16,7 +16,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const { userId } = jwt.verify(authorization, config.accessTokenSalt) as JwtPayload;
-    req.user = await userModel.findOne({ _id: userId });
+    const user = await userModel.findOne({ _id: userId });
+
+    if (!user) {
+      return next(unauthorized('Invalid token (no user associated with provided jwt)'));
+    }
+
+    req.user = user;
 
     return next();
   } catch (e: any) {
