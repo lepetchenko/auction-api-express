@@ -21,7 +21,7 @@ describe('attachUser middleware test', () => {
     // Arrange
     const user = fakeUserCreator();
     const tokens = fakeTokensCreator(user);
-    const fakeModel = modelMockCreator('findOne', user);
+    const fakeModel = modelMockCreator({ methodName: 'findOne', returnValue: user });
     container.rebind(TYPES.models.UserModel).toConstantValue(fakeModel);
 
     const { req, res } = httpMocks.createMocks({
@@ -87,5 +87,32 @@ describe('attachUser middleware test', () => {
     // Assert
     expect(nextFn).toHaveBeenCalledTimes(1);
     expect(nextFn).toHaveBeenCalledWith(unauthorized('Expired token'));
+  });
+
+  it('should call next() with unknown error that was thrown by other service', async () => {
+    expect.hasAssertions();
+
+    // Arrange
+    const user = fakeUserCreator();
+    const tokens = fakeTokensCreator(user);
+    const error = new Error('unexpected error');
+    const fakeModel = modelMockCreator({
+      methodName: 'findOne',
+      method: () => { throw error; },
+    });
+    container.rebind(TYPES.models.UserModel).toConstantValue(fakeModel);
+
+    const { req, res } = httpMocks.createMocks({
+      headers: {
+        Authorization: tokens.access,
+      },
+    });
+
+    // Act
+    await attachUser(req, res, nextFn);
+
+    // Assert
+    expect(nextFn).toHaveBeenCalledTimes(1);
+    expect(nextFn).toHaveBeenCalledWith(error);
   });
 });

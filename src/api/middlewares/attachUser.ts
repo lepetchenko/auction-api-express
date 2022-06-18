@@ -28,7 +28,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         next(unauthorized('Expired token'));
         break;
       default:
-        throw e;
+        next(e);
+        break;
     }
 
     return null;
